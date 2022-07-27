@@ -1,5 +1,6 @@
 from tkinter import N
-from romanos_class import NumeroRomano
+
+from romano_class import NumeroRomano
 
 def test_crear_instancia_numero_romano():
     nr = NumeroRomano(34)
