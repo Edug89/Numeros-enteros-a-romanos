@@ -1,4 +1,5 @@
-#Versión de Romano a entero de Enric
+from cmath import e
+
 
 componentes = {
     1000: 'M', 2000: 'MM', 3000: 'MMM', 
@@ -11,8 +12,22 @@ componentes = {
     1: 'I', 2: 'II', 3: 'III',
     4: 'IL', 5: 'V', 6: 'VI',
     7: 'VII', 8: 'VIII', 9: 'IX'
+}  
+
+simbolos_romanos  = {
+    'M': 1000, 'D': 500, 'C': 100, 'L': 50, 'X': 10, 'V': 5, 'I': 1, '': 0
 }
 
+restas  = {
+    'I': ('V', 'X'), 
+    'X': ('L', 'C'), 
+    'C': ('D', 'M'), 
+}
+
+numeros_romanos = 'IVXLCDM'
+
+class RomanNumberError(Exception):
+    pass
 
 def entero_a_romano(numero):
     numero = "{:0>4d}".format(numero)
@@ -27,34 +42,42 @@ def entero_a_romano(numero):
 
     return romano
 
-
-simbolos_romanos = {"M":1000, "D":500,"C":100, "L":50, "X":10,"V":5, "I":1, "": 0}
-
-class RomanNumberError(Exception):
-    pass
-
-
 def romano_a_entero(romano: str) -> int:
-    res = 0
-    #contador para ver cuántas veces seguidas se repite el caracter
-    contador_rep = 1
-    #variable para guardar el caracter
-    car_anterior = ''
-    #recoremos el caractaer y se compara con el anterior si coincide se suma en el contador
+    r = 0
+    cont_repes = 1
+    car_anterior = ""
+    car_anteanterior = ""
     for caracter in romano:
         if caracter == car_anterior:
-            contador_rep += 1
-        #Si no coincide se pone de nuevo contador a 1
+            cont_repes += 1
         else:
-            contador_rep = 1
-        #rompemos el for si el contador pasa de 3
-        if contador_rep > 3:
-            raise RomanNumberError("No se puede dar más de tres repeticiones")
-            #Comparamos si caracter actual es mayor que caracter anterior para restar
-        if simbolos_romanos[caracter] > simbolos_romanos[car_anterior]:
-            r -= simbolos_romanos[car_anterior]*2
-        #recordamos el caracter anterior
-        res += simbolos_romanos[caracter]
-        car_anterior = caracter 
-        
-    return res
+            cont_repes = 1 
+
+        if cont_repes > 3:
+            raise RomanNumberError("No se pueden dar más de tres repeticiones")
+        elif cont_repes == 2 and caracter in "VLD":
+            raise RomanNumberError(f"No se puede repetir {caracter}")             
+
+
+        if car_anterior and simbolos_romanos[caracter] > simbolos_romanos[car_anterior]:
+        # Forma de diccionario restas
+            if car_anterior not in restas.keys():
+                raise RomanNumberError("El simbolo {} no puede restar".format(car_anterior))
+
+            if caracter not in restas[car_anterior]:
+                raise RomanNumberError(f"{car_anterior} solo se puede restar a {restas[car_anterior][0]} y {restas[car_anterior][1]}")         
+
+            if car_anterior == car_anteanterior:
+                raise RomanNumberError("Si hay repeticion ya no se resta")
+
+            r -= simbolos_romanos[car_anterior] * 2
+
+
+        r += simbolos_romanos[caracter]
+        car_anteanterior = car_anterior
+        car_anterior = caracter
+    
+
+    return r
+
+romano_a_entero("II")
