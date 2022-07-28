@@ -25,13 +25,13 @@ class NumeroRomano:
     }
 
 
-    def __init__(otronombre, valor):
+    def __init__(self, valor):
         if isinstance(valor, int):
-            otronombre.valor = valor
-            otronombre.representacion = otronombre.entero_a_romano(valor)
+            self.valor = valor
+            self.representacion = self.entero_a_romano(valor)
         elif isinstance(valor, str):
-            otronombre.representacion = valor
-            otronombre.valor = otronombre.romano_a_entero(valor)
+            self.representacion = valor
+            self.valor = self.romano_a_entero(valor)
         else:
             raise RomanNumberError("Valor debe ser cadena o entero")       
 
@@ -93,14 +93,17 @@ class NumeroRomano:
             return NumeroRomano(self.valor + otro.valor)
         elif isinstance(otro, int):
             return NumeroRomano(self.valor + otro)
+  
+#El método radd lee la instrucción al revés EJEM(primero lee otro y luego self)
 
     def __radd__(self, otro):
         pass
-
-
 
     def __repr__(self):
         return self.representacion  
 
 nr = NumeroRomano("XXX")
 print("")
+
+
+

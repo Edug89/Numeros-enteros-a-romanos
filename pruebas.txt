@@ -1,0 +1,25 @@
+In [14]:
+class Vector(list):   
+    def __add__(self, other):
+        if len(self) != len(other):
+            raise NotMatchingShapes
+            
+        return Vector([x+y for x,y in zip(self, other)])
+
+    def __mul__(self, other):
+        if isinstance(other, Vector):
+            return Vector([x*y for x,y in zip(self, other)])
+        
+        return Vector([x*other for x in self])
+    
+    def __repr__(self):
+        return "Vector({})".format(list.__repr__(self))
+    
+v1 = Vector([1, 2, 3])
+print(v1 * 3)
+print(v1 * Vector([4, 5 ,6]))
+Vector([3, 6, 9])
+Vector([4, 10, 18])
+
+
+    
