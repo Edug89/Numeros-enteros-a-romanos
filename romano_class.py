@@ -93,11 +93,12 @@ class NumeroRomano:
             return NumeroRomano(self.valor + otro.valor)
         elif isinstance(otro, int):
             return NumeroRomano(self.valor + otro)
+        elif isinstance(otro, float):
+            return NumeroRomano(self.valor + int(otro))
   
 #El método radd lee la instrucción al revés EJEM(primero lee otro y luego self)
-
     def __radd__(self, otro):
-        pass
+        return self.__add__(otro)
 
     def __repr__(self):
         return self.representacion  
